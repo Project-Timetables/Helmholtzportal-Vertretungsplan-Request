@@ -1,8 +1,16 @@
 from bs4 import BeautifulSoup  # Import BeautifulSoup for parsing HTML
 import os  # Import os for file operations
-
+import re
 # Dictionary to store parsed data
 main = {}
+def sort_key(klasse):
+    match = re.match(r"(\d+)([a-zA-Z]?)", klasse)
+    if match:
+        number = int(match.group(1))  # Extract the numeric part
+        letter = match.group(2) or ""  # Extract the letter part, default to empty string
+        return (number, letter)
+    return (float('inf'), "")  # Fallback for unexpected cases
+
 
 def parseHTML(file):
     """Parses an HTML file and extracts relevant data into the 'main' dictionary."""
@@ -78,7 +86,7 @@ for file in os.listdir(f"{os.path.dirname(__file__)}/log"):
 print("\n")
 
 # Sort and print the structured data
-main = dict(sorted(main.items()))
+main = dict(sorted(sorted(main.items()), key=lambda item: sort_key(item[0])))
 for Klasse, days in main.items():
     for day, changes in days.items():
         for Stunde, change in changes.items():
