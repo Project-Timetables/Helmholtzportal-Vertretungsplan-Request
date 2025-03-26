@@ -29,45 +29,45 @@ def parseHTML(file):
     
     for row in rows:
         cells = row.find_all("td")  # Extract table cells from row
-        Klasse = cells[0].get_text()  # Extract class name
+        Klassen = cells[0].get_text().split(", ")  # Extract class names
         
-        # Initialize dictionary structure for class and day if not already present
-        if Klasse not in main:
-            main[Klasse] = {Day: {}}
-        if Day not in main[Klasse]:
-            main[Klasse][Day] = {}
-        
-        # Extract the range of hours
-        Range = cells[1].get_text().split(" - ")
-        if not Range[0].isdigit():  # Ensure valid numeric range
-            continue
-        if len(Range) < 2:  # Handle cases where range is incorrectly formatted
-            Range = cells[1].get_text().split("-")
-            if len(Range) < 2:
-                Range.append(Range[0])  # Default to single-hour range
-        
-        # Iterate through the hour range
-        for i in range(int(Range[0]), int(Range[1]) + 1):
-            Stunde = i  # The specific hour
+        for Klasse in Klassen: #loop through the classes
+            # Initialize dictionary structure for class and day if not already present
+            if Klasse not in main:
+                main[Klasse] = {Day: {}}
+            if Day not in main[Klasse]:
+                main[Klasse][Day] = {}
             
-            # Initialize structure for each hour if it does not exist
-            if Stunde not in main[Klasse][Day]:
-                main[Klasse][Day][Stunde] = {
-                    "Fach": {}, "Vertretungsfach": [], "Vertretungslehrer": [], "Raum": [], "Bemerkung": []
-                }
+            # Extract the range of hours
+            Range = cells[1].get_text().split(" - ")
+            if not Range[0].isdigit():  # Ensure valid numeric range
+                continue
+            if len(Range) < 2:  # Handle cases where range is incorrectly formatted
+                Range = cells[1].get_text().split("-")
+                if len(Range) < 2:
+                    Range.append(Range[0])  # Default to single-hour range
             
-            # Count occurrences of subjects
-            Fach = cells[2].get_text()
-            if Fach not in main[Klasse][Day][Stunde]["Fach"]:
-                main[Klasse][Day][Stunde]["Fach"][Fach] = 1
-            else:
-                main[Klasse][Day][Stunde]["Fach"][Fach] += 1
-            
-            # Append substitution details
-            main[Klasse][Day][Stunde]["Vertretungsfach"].append(cells[3].get_text())
-            main[Klasse][Day][Stunde]["Vertretungslehrer"].append(cells[4].get_text())
-            main[Klasse][Day][Stunde]["Raum"].append(cells[5].get_text())
-            main[Klasse][Day][Stunde]["Bemerkung"].append(cells[6].get_text())
+            # Iterate through the hour range
+            for Stunde in range(int(Range[0]), int(Range[1]) + 1):
+                
+                # Initialize structure for each hour if it does not exist
+                if Stunde not in main[Klasse][Day]:
+                    main[Klasse][Day][Stunde] = {
+                        "Fach": {}, "Vertretungsfach": [], "Vertretungslehrer": [], "Raum": [], "Bemerkung": []
+                    }
+                
+                # Count occurrences of subjects
+                Fach = cells[2].get_text()
+                if Fach not in main[Klasse][Day][Stunde]["Fach"]:
+                    main[Klasse][Day][Stunde]["Fach"][Fach] = 1
+                else:
+                    main[Klasse][Day][Stunde]["Fach"][Fach] += 1
+                
+                # Append substitution details
+                main[Klasse][Day][Stunde]["Vertretungsfach"].append(cells[3].get_text())
+                main[Klasse][Day][Stunde]["Vertretungslehrer"].append(cells[4].get_text())
+                main[Klasse][Day][Stunde]["Raum"].append(cells[5].get_text())
+                main[Klasse][Day][Stunde]["Bemerkung"].append(cells[6].get_text())
     
     print(f"Successfully read from file: {file}")  # Confirm file read
 
