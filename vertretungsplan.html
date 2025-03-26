@@ -1,0 +1,43 @@
+<html>
+  <head>
+  </head>
+
+  <body>
+    <div id="body"></div> <!-- This is where the fetched HTML will be injected -->
+
+    <script>
+      function fetchData() {
+          fetch("http://localhost:3000/api/vertretung")
+          .then(response => response.arrayBuffer()) // Get raw data
+          .then(buffer => new TextDecoder("utf-8").decode(buffer)) // Decode UTF-8 properly
+          .then(html => {
+              let parser = new DOMParser();
+              let doc = parser.parseFromString(html, "text/html");
+  
+                  // Remove meta tags, title, and other head elements but keep styles and scripts
+                  let headElements = doc.head.children;
+                  for (let i = headElements.length - 1; i >= 0; i--) {
+                      let tagName = headElements[i].tagName.toLowerCase();
+                      if (["meta", "title", "link"].includes(tagName)) {
+                          headElements[i].remove();
+                      }
+                  }
+                  let meta = document.createElement("meta");
+                  meta.setAttribute("charset", "utf-8");
+                  doc.head.prepend(meta);
+  
+  
+                  // Combine head (without metadata) and body
+                  // Update the webpage
+                  document.head.innerHTML = doc.head.innerHTML
+                  document.getElementById("body").innerHTML = doc.body.innerHTML
+                  console.log(doc.head.innerHTML)
+              })
+              .catch(error => console.error("Error fetching data:", error));
+      }
+
+      fetchData();
+      setInterval(fetchData, 30000);
+    </script>
+  </body>
+</html>
