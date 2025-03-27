@@ -98,14 +98,13 @@ for Klasse, days in main.items():
         print("")
     print("\n\n")
 while True:
-    Input = input("Which class would you like to get the timetable for? ").upper()
-    if Input == "EXIT":
+    Klasse = input("Which class would you like to get the timetable for? ").upper()
+    if Klasse == "EXIT":
         SystemExit
-    elif Input not in main:
+    elif Klasse not in main:
         print(f"There is no data for this class. Available classes are: {main.keys()}. To exit type 'exit'.")
         continue
-    Klasse = Input
-    for day, changes in main[Input].items():
+    for day, changes in main[Klasse].items():
         for Stunde, change in changes.items():
             print(f"{Klasse}: {day}: {Stunde}: {change["Fach"]}")
         print("")
