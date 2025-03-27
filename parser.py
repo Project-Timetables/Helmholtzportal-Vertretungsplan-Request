@@ -1,5 +1,6 @@
 from bs4 import BeautifulSoup  # Import BeautifulSoup for parsing HTML
 import os  # Import os for file operations
+import sys
 import re
 # Dictionary to store parsed data
 main = {}
@@ -86,9 +87,25 @@ for file in os.listdir(f"{os.path.dirname(__file__)}/log"):
 print("\n")
 
 # Sort and print the structured data
+for Klasse, days in main.items():
+    for day, subjects in days.items():
+        main[Klasse][day] = dict(sorted(subjects.items()))
 main = dict(sorted(sorted(main.items()), key=lambda item: sort_key(item[0])))
 for Klasse, days in main.items():
     for day, changes in days.items():
+        for Stunde, change in changes.items():
+            print(f"{Klasse}: {day}: {Stunde}: {change["Fach"]}")
+        print("")
+    print("\n\n")
+while True:
+    Input = input("Which class would you like to get the timetable for? ").upper()
+    if Input == "EXIT":
+        SystemExit
+    elif Input not in main:
+        print(f"There is no data for this class. Available classes are: {main.keys()}. To exit type 'exit'.")
+        continue
+    Klasse = Input
+    for day, changes in main[Input].items():
         for Stunde, change in changes.items():
             print(f"{Klasse}: {day}: {Stunde}: {change["Fach"]}")
         print("")
