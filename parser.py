@@ -1,6 +1,5 @@
 from bs4 import BeautifulSoup  # Import BeautifulSoup for parsing HTML
 import os  # Import os for file operations
-import sys
 import re
 # Dictionary to store parsed data
 main = {}
@@ -100,7 +99,7 @@ for Klasse, days in main.items():
 while True:
     Klasse = input("Which class would you like to get the timetable for? ").upper()
     if Klasse == "EXIT":
-        SystemExit
+        raise SystemExit
     elif Klasse not in main:
         print(f"There is no data for this class. Available classes are: {main.keys()}. To exit type 'exit'.")
         continue

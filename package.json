@@ -1,0 +1,23 @@
+{
+  "name": "vertretungsplan-fetcher",
+  "version": "1.0.0",
+  "main": "fetcher.js",
+  "scripts": {
+    "start": "node fetcher.js",
+    "build": "pkg fetcher.js --output fetcher.exe --targets node18-win-x64 --no-native -d"
+  },
+  "dependencies": {
+    "jsdom": "^22.1.0",
+    "iconv-lite": "^0.6.3"
+  },
+  "devDependencies": {
+    "pkg": "^5.8.1"
+  },
+  "pkg": {
+    "assets": [
+      "Log/*.html"
+    ],
+    "scripts": [],
+    "outputPath": "dist"
+  }
+}
