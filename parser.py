@@ -19,7 +19,7 @@ def parseHTML(file):
         with open(f"{os.path.dirname(__file__)}/log/{file}", "r") as fd:
             soup = BeautifulSoup(fd, "html.parser")
     except FileNotFoundError:
-        print("File couldn't be found. To exit type exit")
+        print("File couldn't be found.")
         return
     except Exception as e:
         print("File couldn't be read from.")
@@ -30,10 +30,10 @@ def parseHTML(file):
     table = soup.find("table", {"class": "mon_list"})
     
     # Find all rows with class 'list odd' or 'list even'
-    rows = table.find_all("tr", {"class": "list odd" or "list even"})
+    rows = table.find_all("tr", {"class": ["list odd", "list even"]})
     
     # Extract the day information from the 'mon_title' div
-    Day = soup.find("div", {"class": "mon_title"}).get_text().split(" ")[1]
+    Day = soup.find("div", {"class": "mon_title"}).get_text().split(" ")[-1]
     
     for row in rows:
         cells = row.find_all("td")  # Extract table cells from row
